@@ -1,0 +1,17 @@
+{
+  "name": "ImageLab",
+  "short_name": "ImageLab",
+  "description": "A local-first browser image workspace.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f3ef",
+  "theme_color": "#276a5c",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
