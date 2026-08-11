@@ -11,6 +11,7 @@ Thanks for helping make a useful local-first image utility.
 
 ## Design and privacy principles
 
+- Read [AGENTS.md](AGENTS.md) and the canonical [ImageLab design system](docs/DESIGN_SYSTEM.md) before changing shared UI. Inspect the live `/dev/design-system` route during local development.
 - Keep normal image processing in the browser. Do not introduce network uploads for a convenience feature.
 - Prefer built-in browser APIs and defer heavyweight dependencies until a tool needs them.
 - Keep controls functional, keyboard reachable, labelled, and useful at compact viewport sizes.
@@ -18,6 +19,7 @@ Thanks for helping make a useful local-first image utility.
 - Avoid generic dashboard UI, status badges, and decorative controls that do not serve the workflow.
 - Keep Settings entries in `app/lib/settings-registry.ts` so Settings search and the command palette share the same source of truth.
 - Treat the original `File` as immutable. New editing capabilities should add non-destructive operation configuration and preserve undo/redo behavior.
+- Before creating a component, search the current ImageLab primitives and extend an existing interaction when possible. Add genuine new primitives to both the design-system document and development showcase.
 
 ## Adding a tool
 

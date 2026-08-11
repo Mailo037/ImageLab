@@ -47,6 +47,7 @@ npm run build
 ```text
 app/
   components/image-lab.tsx     unified local editing workspace
+  dev/design-system/           development-only live component reference
   lib/tools.ts                 central tool registry, categories, routes, capabilities
   lib/processor.ts             Canvas processing primitives and encoders
   lib/updates.ts               semantic version comparison and release lookup
@@ -59,13 +60,14 @@ public/
   sw.js                        generated service worker checked into releases
   release.json                 generated stable-release metadata
 docs/
+  DESIGN_SYSTEM.md
   tool-architecture.md
   processing-architecture.md
   update-architecture.md
   releases.md
 ```
 
-See the [tool architecture](docs/tool-architecture.md), [processing architecture](docs/processing-architecture.md), [update architecture](docs/update-architecture.md), and [release guide](docs/releases.md) for extension and maintenance details.
+Start with [AGENTS.md](AGENTS.md) for the repository contract. See the [design system](docs/DESIGN_SYSTEM.md), [tool architecture](docs/tool-architecture.md), [processing architecture](docs/processing-architecture.md), [update architecture](docs/update-architecture.md), and [release guide](docs/releases.md) for focused extension and maintenance details. During local development, `/dev/design-system` renders the real reusable UI components and their important states.
 
 ## Browser support and format notes
 

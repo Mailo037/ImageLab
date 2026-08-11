@@ -23,3 +23,10 @@ test("renders direct tool and Settings routes as their matching ImageLab views",
   assert.match(await updates.text(), /Updates/);
   assert.match(await pixelate.text(), /Pixelate/);
 });
+
+test("does not expose the design-system showcase in production", async () => {
+  const worker = await createWorker();
+  const response = await worker.fetch(new Request("http://localhost/dev/design-system", { headers: { accept: "text/html" } }), environment, context);
+
+  assert.equal(response.status, 404);
+});
