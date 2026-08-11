@@ -40,6 +40,12 @@ When the user chooses **Update now**:
 
 The snapshot expires after 30 minutes. It includes files only when IndexedDB can structured-clone them; the fallback preserves settings and operation state but not raw file bytes. Imported files remain local at every stage.
 
+## Offline failure behavior
+
+The service worker must always settle a fetch event with a `Response`. A failed uncached navigation first falls back to its cached route, then the cached application shell, and finally a small `503` offline document. A failed uncached asset request returns a normal `504` offline response instead of rejecting the fetch event. This prevents a transient network failure from surfacing as an unhandled service-worker promise or a browser-level network-error response.
+
+Shell pre-caching is best effort: one unavailable shell asset must not prevent a new worker from installing. Successful later responses are still cached opportunistically.
+
 ## Generated assets
 
 `public/sw.template.js` is the human-maintained source. `npm run generate:release` produces these checked-in artifacts:
