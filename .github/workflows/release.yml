@@ -2,6 +2,7 @@ name: Release
 
 on:
   push:
+    branches: [main]
     tags: ["v*.*.*"]
 
 permissions:
@@ -18,13 +19,30 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node scripts/assert-release-version.mjs "${GITHUB_REF_NAME}"
+      - id: release
+        name: Resolve release version
+        run: echo "tag=v$(node -p \"require('./package.json').version\")" >> "$GITHUB_OUTPUT"
+      - name: Validate pushed tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: test "${GITHUB_REF_NAME}" = "${{ steps.release.outputs.tag }}"
+      - run: node scripts/assert-release-version.mjs "${{ steps.release.outputs.tag }}"
       - run: npm run typecheck
       - run: npm run lint
       - name: Production build and tests
         run: npm test
-      - run: node scripts/release-notes.mjs "${GITHUB_REF_NAME}" > RELEASE_NOTES.md
-      - name: Publish GitHub Release
+      - run: node scripts/release-notes.mjs "${{ steps.release.outputs.tag }}" > RELEASE_NOTES.md
+      - id: existing-release
+        name: Check existing release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" --title "ImageLab ${GITHUB_REF_NAME}" --notes-file RELEASE_NOTES.md
+        run: |
+          if gh release view "${{ steps.release.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish GitHub Release
+        if: steps.existing-release.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ steps.release.outputs.tag }}" --target "$GITHUB_SHA" --title "ImageLab ${{ steps.release.outputs.tag }}" --notes-file RELEASE_NOTES.md
